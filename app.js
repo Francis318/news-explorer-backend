@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const { login, createUser } = require("./controllers/users");
 const auth = require("./middlewares/auth");
@@ -10,11 +11,15 @@ const errorHandler = require("./errors/errorHandler");
 const { celebrate, Joi } = require("celebrate");
 
 const app = express();
-const { PORT = 3000 } = process.env;
+app.use(cors());
+const { PORT = 3001 } = process.env;
 
 const { errors } = require("celebrate");
 
-mongoose.connect("mongodb://127.0.0.1:27017/newsexplorerdb");
+mongoose
+  .connect("mongodb://127.0.0.1:27017/newsexplorerdb")
+  .then(() => console.log("¡Conectado a newsexplorerdb!"))
+  .catch((err) => console.error("Error de conexión:", err));
 
 app.use(express.json());
 app.use(requestLogger);
